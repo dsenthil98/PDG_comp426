@@ -5,31 +5,28 @@ $(function() {
 
 const handleLogin = async function(event) {
     event.preventDefault();
-
-    let result = await axios({
-        method: "post",
-        url: "http://localhost:3000/account/login",
-        data: {
-            name: "" + $(`#usernameval`).val() + "",
-            pass: "" + $(`#passwordval`).val() + ""
-        }
+    let response = axios.post('http://localhost:3000/account/login', {
+        name: "" + $(`#usernameval`).val() + "",
+        pass: "" + $(`#passwordval`).val() + "",
+        
     });
-
-    localStorage.setItem('jwt', result.data.jwt); 
-    
-    let request = axios.get('http://localhost:3000/account/status', 
-        {
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem('jwt')
-            }
-        }
-    );
-
-    request.then(response => {
+ 
+    response.then(response => {
         console.log(response.data);
+        console.log("hi")
+        localStorage.setItem('jwt', response.data.jwt); 
         window.location.href = "http://localhost:3001/loggedin.html"
     }).catch(error => {
-        alert(error);
-    });
+        //console.log("error");
+        //console.log(error.response.data)
+        console.log("hello")
+        if (error.response.data.msg.includes("Bad username or password.")) {
+            $(`#incorrectFieldsWarning`).replaceWith(`<h5 id = "incorrectFieldsWarning" style = "color: red"> ** Invalid username/password combination. ** </h5>`); 
+        } 
+        if (error.response.data.msg.includes("not a registered user.")) {
+            $(`#incorrectFieldsWarning`).replaceWith(`<h5 id = "incorrectFieldsWarning" style = "color: red"> ** Username does not exist. Sign up for an account first. ** </h5>`); 
+        }
+        
+    })
     
 }
