@@ -4,12 +4,11 @@ $(function() {
 });
 
 const handleCreateAccount = async function(event) {
-    console.log("hello")
+    console.log("hello") 
     if ($.trim($(`#usernameval`).val()) == "" || $.trim($(`#nameval`).val()) == "" || $.trim($(`#schoolval`).val()) == "" || $.trim($(`#majorval`).val()) == "" || $.trim($(`#passwordval`).val()) == "") {
-        if (!document.getElementById("fillAllFieldsWarning")) {
-        $(`#inputFields`).append(`<h5 id = "fillAllFieldsWarning" style = "color: red"> **Must fill out all fields!** </h5>`); 
-        }
-    } else {
+        $(`#incorrectFieldsWarning`).replaceWith(`<h5 id = "incorrectFieldsWarning" style = "color: red"> ** Must fill out all fields! ** </h5>`); 
+    } 
+    else {
         event.preventDefault();
         let response = axios.post('http://localhost:3000/account/create', {
             name: "" + $(`#usernameval`).val() + "",
@@ -24,10 +23,18 @@ const handleCreateAccount = async function(event) {
 
         response.then(response => {
             console.log(response.data);
+            if (response.data.status.includes("Successfully made account")) {
+                $(`#incorrectFieldsWarning`).replaceWith(`<h5 id = "incorrectFieldsWarning" style = "color:#3dde37"> ** Account successfully created! Log in now. ** </h5>`); 
+            }
         }).catch(error => {
             console.log(error);
-        });
+            if (error.response.data.msg.toString().includes("already a registered user")) {
+                $(`#incorrectFieldsWarning`).replaceWith(`<h5 id = "incorrectFieldsWarning" style = "color: red"> ** Username is already taken! ** </h5>`); 
+            } 
+        })
+        
 
-        window.location.href = "http://localhost:3001/login.html"
+        //window.location.href = "http://localhost:3001/login.html"
     }
 }
+
