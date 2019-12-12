@@ -1,7 +1,6 @@
 let id = parseInt(localStorage.id)
 
 $(function() {
-    console.log("hi"); 
     $('#healthSubmitPost').click(handleSubmit);
     $('#healthCancelPost').click(resetPostBox);
     renderHealth(); 
@@ -46,9 +45,7 @@ const handleSubmit = async function(event) {
         {headers: {Authorization: "Bearer " + jwt}},);
     
     result.then(response => {
-            console.log(response.data);
         }).catch(error => {
-            console.log(error);
         });
 
     id = id + 1; 
@@ -122,7 +119,6 @@ const handleDelete = async function(event) {
             Authorization: "Bearer " + jwt
         },
       });
-      console.log(result); 
       renderHealth(); 
 }
 
@@ -162,7 +158,6 @@ const handleUpdate = async function(event) {
             Authorization: "Bearer " + jwt
         },
     }); 
-    console.log(result)
     let result2 = axios.post('http://localhost:3000/private/health/' + id, {
         data: {
             title: $(`#editPostTitle`).val(),
@@ -184,6 +179,5 @@ async function deleteTest() {
             Authorization: "Bearer " + jwt
         },
       });
-    console.log(result); 
 }
 
