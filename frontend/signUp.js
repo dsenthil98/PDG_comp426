@@ -1,10 +1,8 @@
 $(function() {
-    console.log("hi"); 
     $('#sign-up').click(handleCreateAccount);
 });
 
 const handleCreateAccount = async function(event) {
-    console.log("hello") 
     if ($.trim($(`#usernameval`).val()) == "" || $.trim($(`#nameval`).val()) == "" || $.trim($(`#schoolval`).val()) == "" || $.trim($(`#majorval`).val()) == "" || $.trim($(`#passwordval`).val()) == "") {
         $(`#incorrectFieldsWarning`).replaceWith(`<h5 id = "incorrectFieldsWarning" style = "color: red"> ** Must fill out all fields! ** </h5>`); 
     } 
@@ -22,12 +20,10 @@ const handleCreateAccount = async function(event) {
         });
 
         response.then(response => {
-            console.log(response.data);
             if (response.data.status.includes("Successfully made account")) {
                 $(`#incorrectFieldsWarning`).replaceWith(`<h5 id = "incorrectFieldsWarning" style = "color:#3dde37"> ** Account successfully created! Log in now. ** </h5>`); 
             }
         }).catch(error => {
-            console.log(error);
             if (error.response.data.msg.toString().includes("already a registered user")) {
                 $(`#incorrectFieldsWarning`).replaceWith(`<h5 id = "incorrectFieldsWarning" style = "color: red"> ** Username is already taken! ** </h5>`); 
             } 
